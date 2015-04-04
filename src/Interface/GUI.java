@@ -25,7 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import Logic.Graph;
+import Graph.Graph;
 
 public class GUI implements KeyListener, MouseListener{
 	

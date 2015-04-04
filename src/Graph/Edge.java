@@ -1,4 +1,4 @@
-package Logic;
+package Graph;
 
 public class Edge {
 	protected Node a, b;

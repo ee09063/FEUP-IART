@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import Logic.Edge;
-import Logic.Graph;
-import Logic.Node;
+import Graph.Edge;
+import Graph.Graph;
+import Graph.Node;
 
 public class myPanel extends JPanel {
 
