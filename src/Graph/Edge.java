@@ -1,17 +1,19 @@
 package Graph;
 
+import Utilities.Cost;
+
 public class Edge {
-	protected Node a, b;
-	protected double weight;
+	private Node a, b;
+	private Cost cost;
 	
-	public Edge(Node a, Node b, double weight){
+	public Edge(Node a, Node b, Cost cost){
 		this.a = a;
 		this.b = b;
-		this.weight = weight;
+		this.cost = cost;
 	}
 	
-	public double getWeight(){
-		return this.weight;
+	public Cost getCost(){
+		return this.cost;
 	}
 	
 	public String toString(){

@@ -1,6 +1,11 @@
-Node A | 2 | 2 | 1 | 1
-Node B | 4 | 3 | 2 | 1
-Node C | 5 | 3 | 1 | 2
-Node A | Node B | 3
-Node A | Node C | 3
-Node B | Node C | 3
+Node A | 1 | 1 | 1 | 1
+Node B | 1 | 1 | 2 | 1
+Node C | 1 | 1 | 1 | 2
+Node D | 1 | 1 | 2 | 2
+Node E | 1 | 1 | 2 | 3
+Node A | Node B | 1
+Node A | Node C | 1
+Node B | Node C | 1
+Node B | Node D | 1
+Node C | Node E | 1
+Node D | Node E | 1

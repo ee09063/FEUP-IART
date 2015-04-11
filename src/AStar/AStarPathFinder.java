@@ -4,13 +4,17 @@ import java.util.ArrayList;
 
 import Graph.Graph;
 import Graph.Node;
+import Utilities.Cost;
+import Utilities.Pair;
 import Utilities.Path;
 import Utilities.SortedList;
 
 public class AStarPathFinder{
-	private ArrayList<Node> closed = new ArrayList();
+	private ArrayList<Node> closed = new ArrayList<Node>();
 	private SortedList open = new SortedList();
+	@SuppressWarnings("unused")
 	private Path path;
+	@SuppressWarnings("unused")
 	private Graph graph;
 	private Node start;
 	
@@ -20,6 +24,9 @@ public class AStarPathFinder{
 	}
 	
 	public Path runAStar(Node target){
+		
+		System.out.println("STARTING NODE: " + this.start.getName());
+		System.out.println("TARGET NODE: " + target.getName());
 		
 		closed.clear();
 		open.clear();
@@ -31,13 +38,17 @@ public class AStarPathFinder{
 			 * CHECK IF TARGET
 			 */
 			if(current == target){
+				System.out.println("TARGET FOUND");
 				return reconstructPath(current);
 			}
-			
+		
 			open.remove(current);
 			closed.add(current);
 			
-			for(Node neighbor : current.getNeighbourList()){
+			for(Pair<Node,Cost> pair : current.getNeighbourList()){
+				
+				Node neighbor = pair.getFirst();
+				Cost edge = pair.getSecond();
 				boolean neighborIsBetter;
 				
 				if(closed.contains(neighbor)){
@@ -46,13 +57,15 @@ public class AStarPathFinder{
 				/*
 				 * CALCULATE HOW LONG THE PATH IS
 				 */
-				neighbor.setCost(current.getCost());
-				float neighborCost = neighbor.getCost();
+				float neighborCost = neighbor.getTimeCost()
+										+ edge.getCost()
+										+ current.getFValue();
+				//neighbor.setCost(neighborCost);
 				
 				if(!open.contains(neighbor)){
 					open.add(neighbor);
 					neighborIsBetter = true;
-				} else if(neighborCost < current.getCost()){
+				} else if(neighborCost < neighbor.getFValue()){
 					neighborIsBetter = true;
 				} else {
 					neighborIsBetter = false;
@@ -70,7 +83,7 @@ public class AStarPathFinder{
 	
 	private Path reconstructPath(Node node){
 		Path path = new Path();
-		while(!(node.getParent() == null)){
+		while(!(node == null)){
 			path.prepend(node);
 			node = node.getParent();
 		}

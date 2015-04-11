@@ -2,14 +2,18 @@ package Graph;
 
 import java.util.ArrayList;
 
+import Utilities.Cost;
+import Utilities.Pair;
+
 public class Node implements Comparable<Node>{
+	
 	private String name;
 	private int time_cost;
 	private int importance;
 	protected boolean visited;
 	protected boolean enjoyed;
 	protected Node parent;
-	private ArrayList<Node> neighbours;
+	private ArrayList<Pair<Node,Cost>> neighbours = new ArrayList<Pair<Node,Cost>>();
 	
 	protected int x;
 	protected int y;
@@ -24,7 +28,8 @@ public class Node implements Comparable<Node>{
 		this.x = x;
 		this.y = y;
 		this.parent = null;
-		neighbours = new ArrayList<Node>();
+		this.cost=0;
+		this.heuristic=0;
 	}
 	
 	public boolean isVisited(){
@@ -47,7 +52,7 @@ public class Node implements Comparable<Node>{
 		this.enjoyed = true;
 	}
 	
-	public int getCost(){
+	public int getTimeCost(){
 		return this.time_cost;
 	}
 	
@@ -79,15 +84,15 @@ public class Node implements Comparable<Node>{
 		return this.name;
 	}
 
-	public void addNeighbour(Node n){
-		this.neighbours.add(n);
+	public void addNeighbour(Node n, Cost c){
+		this.neighbours.add(new Pair<Node,Cost>(n,c));
 	}
 	
-	public ArrayList<Node> getNeighbourList(){
+	public ArrayList<Pair<Node,Cost>> getNeighbourList(){
 		return this.neighbours;
 	}
 	
-	public void setNeighbourList(ArrayList<Node> list){
+	public void setNeighbourList(ArrayList<Pair<Node,Cost>> list){
 		this.neighbours = list;
 	}
 	

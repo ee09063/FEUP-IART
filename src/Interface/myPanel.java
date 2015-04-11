@@ -2,6 +2,8 @@ package Interface;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -43,6 +45,14 @@ public class myPanel extends JPanel {
 		g.fillOval(x,y,r*2,r*2);
 	}
 	
+	public void drawOutlineCircle(Graphics2D g, int x, int y, int r){
+		x = x-(r);
+		y = y-(r);
+		
+		g.setColor(Color.BLACK);
+		g.fillOval(x,y,r*2,r*2);
+	}
+	
 	public void drawConnectingLine(Graphics2D g, int x1, int y1, int x2, int y2){
 		g.drawLine(x1, y1, x2, y2);
 	}
@@ -56,10 +66,35 @@ public class myPanel extends JPanel {
 							   (e.getNodeB().getY()-1)*100+50);
 		}
 		for(Node n : gr.getNodes()){
+			drawOutlineCircle(g, (n.getX()-1)*100+50,
+								 (n.getY()-1)*100+50, 28);
 			drawCenteredCircle(g, (n.getX()-1)*100+50,
 								  (n.getY()-1)*100+50, 25);
+			drawCenteredText(g, (n.getX()-1)*100+50,
+								(n.getY()-1)*100+50,
+								10,
+								n.getName());
 		}
 	}
+	
+	public void drawCenteredText(Graphics g, int x, int y, float size, String text) {
+		// Create a new font with the desired size
+		Font newFont = g.getFont().deriveFont(size);
+		g.setFont(newFont);
+		g.setColor(Color.BLACK);
+		// Find the size of string s in font f in the current Graphics context g.
+		FontMetrics fm = g.getFontMetrics();
+		java.awt.geom.Rectangle2D rect = fm.getStringBounds(text, g);
+
+		int textHeight = (int) (rect.getHeight());
+		int textWidth = (int) (rect.getWidth());
+
+		// Find the top left and right corner
+		int cornerX = x - (textWidth / 2);
+		int cornerY = y - (textHeight / 2) + fm.getAscent();
+
+		g.drawString(text, cornerX, cornerY);  // Draw the string.
+		}
 	
 	@Override
 	public Dimension getPreferredSize(){

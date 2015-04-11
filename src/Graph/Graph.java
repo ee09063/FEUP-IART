@@ -6,8 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.regex.Pattern;
+
+import Utilities.Cost;
+import Utilities.Pair;
 
 public class Graph {
 	protected ArrayList<Node> nodes = new ArrayList<Node>();
@@ -27,14 +29,14 @@ public class Graph {
 		return null;
 	}
 	
-	public ArrayList<Node> getAdj(Node n){
-		ArrayList<Node> adjs = new ArrayList<Node>();
+	public ArrayList<Pair<Node,Cost>> getAdj(Node n){
+		ArrayList<Pair<Node,Cost>> adjs = new ArrayList<Pair<Node,Cost>>();
 		for(int i = 0; i < edges.size(); i++){
 			Edge e = edges.get(i);
-			if(e.a == n)
-				adjs.add(e.b);
-			else if(e.b == n)
-				adjs.add(e.a);
+			if(e.getNodeA() == n)
+				adjs.add(new Pair<Node,Cost>(e.getNodeB(), e.getCost()));
+			else if(e.getNodeB() == n)
+				adjs.add(new Pair<Node,Cost>(e.getNodeA(), e.getCost()));
 		}
 		return adjs;
 	}
@@ -71,14 +73,18 @@ public class Graph {
 					if(nodeA == null || nodeB == null){
 						System.err.println("Error parsing Edge : " + line);
 					} else {
-						int w = Integer.parseInt(info[2].trim());
-						Edge e = new Edge(nodeA, nodeB, w);
+						float w = Float.parseFloat(info[2].trim());
+						Edge e = new Edge(nodeA, nodeB, new Cost(w));
 						this.edges.add(e);
 					}
 				} else {
 					System.err.println("Error parsing line : " + line);
 				}
 			}
+			/*
+			 * BUILD THE NEIGHBORS
+			 */
+			this.contructNeighbours();
 			System.out.println("Finished importing Graph. Node Size : " + this.nodes.size() + " Edge Size : " + this.edges.size());
 		}
 	}

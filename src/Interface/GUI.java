@@ -2,7 +2,6 @@ package Interface;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -18,14 +17,15 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import AStar.AStarPathFinder;
 import Graph.Graph;
+import Utilities.Path;
 
 public class GUI implements KeyListener, MouseListener{
 	
@@ -35,6 +35,8 @@ public class GUI implements KeyListener, MouseListener{
 	protected static myPanel map;
 	protected static GUI window;
 	protected static JFrame frame;
+	
+	protected static Graph graph;
 	
 	private static WindowListener closeWindow = new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
@@ -97,7 +99,7 @@ public class GUI implements KeyListener, MouseListener{
     				 * GRAPH BULDING GOES HERE
     				 */
     				try {
-						Graph graph = new Graph(file);
+						graph = new Graph(file);
 						myPanel.g_to_draw = graph;
 						map.repaint();
 					} catch (FileNotFoundException e1) {
@@ -110,6 +112,9 @@ public class GUI implements KeyListener, MouseListener{
     			/*
     			 * APPLICATION OF THE ALGORITH GOES HERE
     			 */
+    			AStarPathFinder pathFinder = new AStarPathFinder(graph, graph.getNode("Node A"));
+    			Path path = pathFinder.runAStar(graph.getNode("Node E"));
+    			System.out.println(path);
     		}
     	});
     	

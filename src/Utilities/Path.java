@@ -34,4 +34,12 @@ public class Path {
 		}
 		return false;
 	}
+	
+	public String toString(){
+		String str = "";
+		for(Node n : path){
+			str += n.getName() + "->";
+		}
+		return str;
+	}
 }
