@@ -12,6 +12,7 @@ public class Node implements Comparable<Node>{
 	private int importance;
 	protected boolean visited;
 	protected boolean enjoyed;
+	protected boolean paintNode;
 	protected Node parent;
 	private ArrayList<Pair<Node,Cost>> neighbours = new ArrayList<Pair<Node,Cost>>();
 	
@@ -30,6 +31,7 @@ public class Node implements Comparable<Node>{
 		this.parent = null;
 		this.cost=0;
 		this.heuristic=0;
+		this.paintNode = false;
 	}
 	
 	public boolean isVisited(){
@@ -94,6 +96,14 @@ public class Node implements Comparable<Node>{
 	
 	public void setNeighbourList(ArrayList<Pair<Node,Cost>> list){
 		this.neighbours = list;
+	}
+	
+	public void setPaintNode(boolean b){
+		this.paintNode = true;
+	}
+	
+	public boolean getPaintNode(){
+		return this.paintNode;
 	}
 	
 	public int compareFValue(Object o) {

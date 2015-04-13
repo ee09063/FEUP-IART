@@ -37,51 +37,68 @@ public class myPanel extends JPanel {
 	}
 
 	
-	public void drawCenteredCircle(Graphics2D g, int x, int y, int r){
+	public void drawCenteredCircle(Graphics2D g, int x, int y, int r, Color color){
 		x = x-(r);
 		y = y-(r);
 		
-		g.setColor(Color.WHITE);
+		g.setColor(color);
 		g.fillOval(x,y,r*2,r*2);
 	}
 	
-	public void drawOutlineCircle(Graphics2D g, int x, int y, int r){
+	public void drawOutlineCircle(Graphics2D g, int x, int y, int r, Color color){
 		x = x-(r);
 		y = y-(r);
 		
-		g.setColor(Color.BLACK);
+		g.setColor(color);
 		g.fillOval(x,y,r*2,r*2);
 	}
 	
-	public void drawConnectingLine(Graphics2D g, int x1, int y1, int x2, int y2){
+	public void drawConnectingLine(Graphics2D g, int x1, int y1, int x2, int y2, Color color){
+		g.setColor(color);
 		g.drawLine(x1, y1, x2, y2);
 	}
 	
 	public void drawGraph(Graphics2D g, Graph gr){
 		for(Edge e : gr.getEdges()){
-			drawConnectingLine(g,
-							   (e.getNodeA().getX()-1)*100+50,
-							   (e.getNodeA().getY()-1)*100+50,
-							   (e.getNodeB().getX()-1)*100+50,
-							   (e.getNodeB().getY()-1)*100+50);
+			if(e.paint()){
+				drawEdge(g, e, Color.GREEN);
+			} else if(!e.paint()){
+				drawEdge(g, e, Color.BLACK);
+			}
 		}
 		for(Node n : gr.getNodes()){
-			drawOutlineCircle(g, (n.getX()-1)*100+50,
-								 (n.getY()-1)*100+50, 28);
-			drawCenteredCircle(g, (n.getX()-1)*100+50,
-								  (n.getY()-1)*100+50, 25);
-			drawCenteredText(g, (n.getX()-1)*100+50,
-								(n.getY()-1)*100+50,
-								10,
-								n.getName());
+			if(n.getPaintNode()){
+				drawNode(g, n, Color.GREEN, Color.WHITE, Color.BLACK);
+			} else if(!n.getPaintNode()){
+				drawNode(g, n, Color.BLACK, Color.WHITE, Color.BLACK);
+			}
 		}
 	}
 	
-	public void drawCenteredText(Graphics g, int x, int y, float size, String text) {
+	public void drawNode(Graphics2D g, Node n, Color outline, Color center, Color text){
+		drawOutlineCircle(g, (n.getX()-1)*100+50,
+				 (n.getY()-1)*100+50, 28, outline);
+		drawCenteredCircle(g, (n.getX()-1)*100+50,
+						  (n.getY()-1)*100+50, 25, center);
+		drawCenteredText(g, (n.getX()-1)*100+50,
+						(n.getY()-1)*100+50,
+						10,
+						n.getName(), text);
+	}
+	
+	public void drawEdge(Graphics2D g, Edge e, Color color){
+		drawConnectingLine(g,
+				   (e.getNodeA().getX()-1)*100+50,
+				   (e.getNodeA().getY()-1)*100+50,
+				   (e.getNodeB().getX()-1)*100+50,
+				   (e.getNodeB().getY()-1)*100+50, color);
+	}
+	
+	public void drawCenteredText(Graphics g, int x, int y, float size, String text, Color color) {
 		// Create a new font with the desired size
 		Font newFont = g.getFont().deriveFont(size);
 		g.setFont(newFont);
-		g.setColor(Color.BLACK);
+		g.setColor(color);
 		// Find the size of string s in font f in the current Graphics context g.
 		FontMetrics fm = g.getFontMetrics();
 		java.awt.geom.Rectangle2D rect = fm.getStringBounds(text, g);

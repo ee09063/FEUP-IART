@@ -26,17 +26,20 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import AStar.AStarPathFinder;
 import Graph.Graph;
 import Utilities.Path;
+import Utilities.Refresh;
 
 public class GUI implements KeyListener, MouseListener{
 	
 	protected static JMenuBar menu;
 	protected static JMenu menu_file;
 	
-	protected static myPanel map;
+	public static myPanel map;
 	protected static GUI window;
 	protected static JFrame frame;
 	
 	protected static Graph graph;
+	
+	protected static Thread refreshThread;
 	
 	private static WindowListener closeWindow = new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
@@ -87,34 +90,7 @@ public class GUI implements KeyListener, MouseListener{
     	load_map.setToolTipText("Load Map");
     	load_map.addActionListener(new ActionListener(){
     		public void actionPerformed(ActionEvent e){
-    			JFileChooser f = new JFileChooser();
-    			f.setCurrentDirectory(new File(System.getProperty("user.dir")));
-    			FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT", "txt");
-    			f.setFileFilter(filter);
-    			int returnVal = f.showOpenDialog(frame);
-    			if(returnVal == JFileChooser.APPROVE_OPTION){
-    				File file = f.getSelectedFile();
-    				System.out.println("You tried to load file " + file.getName());
-    				/*
-    				 * GRAPH BULDING GOES HERE
-    				 */
-    				try {
-						graph = new Graph(file);
-						myPanel.g_to_draw = graph;
-						map.repaint();
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-    				
-    			}
-    			/*
-    			 * APPLICATION OF THE ALGORITH GOES HERE
-    			 */
-    			AStarPathFinder pathFinder = new AStarPathFinder(graph, graph.getNode("Node A"));
-    			Path path = pathFinder.runAStar(graph.getNode("Node E"));
-    			System.out.println(path);
+    			loadAndRun();
     		}
     	});
     	
@@ -133,8 +109,43 @@ public class GUI implements KeyListener, MouseListener{
     	menu_file.add(exit);
     	menu.add(menu_file);
     	frame.setJMenuBar(menu);
+    	
+    	Refresh refresh = new Refresh(map,100);
+    	refreshThread = new Thread(refresh);
+    	refreshThread.start();
     }
 	
+    public void loadAndRun(){
+    	JFileChooser f = new JFileChooser();
+		f.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT", "txt");
+		f.setFileFilter(filter);
+		int returnVal = f.showOpenDialog(frame);
+		if(returnVal == JFileChooser.APPROVE_OPTION){
+			File file = f.getSelectedFile();
+			System.out.println("You tried to load file " + file.getName());
+			/*
+			 * GRAPH BULDING GOES HERE
+			 */
+			try {
+				graph = new Graph(file);
+				myPanel.g_to_draw = graph;
+				//map.repaint();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		/*
+		 * APPLICATION OF THE ALGORITH GOES HERE
+		 */
+		AStarPathFinder pathFinder = new AStarPathFinder(graph, graph.getNode("Node A"));
+		Path path = pathFinder.runAStar(graph.getNode("Node E"));
+		System.out.println(path);
+    }
+    
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
