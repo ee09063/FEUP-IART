@@ -22,7 +22,8 @@ public class myPanel extends JPanel {
 	
 	static Graph g_to_draw = null;
 	
-	protected static int MAP_SIZE = 600; 
+	public static int MAP_SIZE_X = 1200;
+	public static int MAP_SIZE_Y = 900;
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -59,6 +60,7 @@ public class myPanel extends JPanel {
 	}
 	
 	public void drawGraph(Graphics2D g, Graph gr){
+		
 		for(Edge e : gr.getEdges()){
 			if(e.paint()){
 				drawEdge(g, e, Color.GREEN);
@@ -76,22 +78,27 @@ public class myPanel extends JPanel {
 	}
 	
 	public void drawNode(Graphics2D g, Node n, Color outline, Color center, Color text){
-		drawOutlineCircle(g, (n.getX()-1)*100+50,
-				 (n.getY()-1)*100+50, 28, outline);
-		drawCenteredCircle(g, (n.getX()-1)*100+50,
-						  (n.getY()-1)*100+50, 25, center);
-		drawCenteredText(g, (n.getX()-1)*100+50,
-						(n.getY()-1)*100+50,
-						10,
-						n.getName(), text);
+		
+		drawOutlineCircle(g, n.getX(), n.getY(), 28, outline);
+		drawCenteredCircle(g, n.getX(), n.getY(), 25, center);
+		drawCenteredText(g, n.getX(), n.getY(), 10, n.getName(), text);
+//		drawOutlineCircle(g, (n.getX()-1)*100+50,
+//				 (n.getY()-1)*100+50, 28, outline);
+//		drawCenteredCircle(g, (n.getX()-1)*100+50,
+//						  (n.getY()-1)*100+50, 25, center);
+//		drawCenteredText(g, (n.getX()-1)*100+50,
+//						(n.getY()-1)*100+50,
+//						10,
+//						n.getName(), text);
 	}
 	
 	public void drawEdge(Graphics2D g, Edge e, Color color){
-		drawConnectingLine(g,
-				   (e.getNodeA().getX()-1)*100+50,
-				   (e.getNodeA().getY()-1)*100+50,
-				   (e.getNodeB().getX()-1)*100+50,
-				   (e.getNodeB().getY()-1)*100+50, color);
+		drawConnectingLine(g, e.getNodeA().getX(), e.getNodeA().getY(), e.getNodeB().getX(), e.getNodeB().getY()-1, color);
+//		drawConnectingLine(g,
+//				   (e.getNodeA().getX()-1)*100+50,
+//				   (e.getNodeA().getY()-1)*100+50,
+//				   (e.getNodeB().getX()-1)*100+50,
+//				   (e.getNodeB().getY()-1)*100+50, color);
 	}
 	
 	public void drawCenteredText(Graphics g, int x, int y, float size, String text, Color color) {
@@ -115,7 +122,7 @@ public class myPanel extends JPanel {
 	
 	@Override
 	public Dimension getPreferredSize(){
-		return new Dimension(MAP_SIZE, MAP_SIZE);
+		return new Dimension(MAP_SIZE_X, MAP_SIZE_Y);
 	}
 	
 }

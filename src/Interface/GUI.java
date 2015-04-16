@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import AStar.AStarPathFinder;
+import Geoname.Geoname;
 import Graph.Graph;
 import Utilities.Path;
 import Utilities.Refresh;
@@ -46,6 +47,7 @@ public class GUI implements KeyListener, MouseListener{
         	map.setFocusable(true);
         	map.requestFocusInWindow();
             e.getWindow().dispose();
+            System.exit(0);
         }
     };
 	
@@ -129,6 +131,12 @@ public class GUI implements KeyListener, MouseListener{
 			 */
 			try {
 				graph = new Graph(file);
+				Geoname geoname = new Geoname();
+				try {
+					geoname.getLatLong(graph);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				myPanel.g_to_draw = graph;
 				//map.repaint();
 			} catch (FileNotFoundException e1) {
@@ -141,8 +149,8 @@ public class GUI implements KeyListener, MouseListener{
 		/*
 		 * APPLICATION OF THE ALGORITH GOES HERE
 		 */
-		AStarPathFinder pathFinder = new AStarPathFinder(graph, graph.getNode("Node A"));
-		Path path = pathFinder.runAStar(graph.getNode("Node E"));
+		AStarPathFinder pathFinder = new AStarPathFinder(graph, graph.getNode("Eiffel"));
+		Path path = pathFinder.runAStar(graph.getNode("Bastille"));
 		System.out.println(path);
     }
     

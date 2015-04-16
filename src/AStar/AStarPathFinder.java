@@ -65,7 +65,6 @@ public class AStarPathFinder{
 										+ edge.getCost()
 										+ current.getFValue();
 				System.out.println("I AM " + current.getName() + " COST OF " + neighbor.getName() + " : " + neighborCost);
-				//neighbor.setCost(neighborCost);
 				
 				if(!open.contains(neighbor)){
 					open.add(neighbor);

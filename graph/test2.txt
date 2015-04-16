@@ -1,0 +1,16 @@
+Saint James | Saint James Spa France | 1 | 1
+Louvre | Louvre Museum France | 1 | 1
+Eiffel | Tour Eiffel | 1 | 1
+Pont D'alma | Alma Paris France | 1 | 1
+Notre Dame | Notre Dame | 1 | 1
+Bastille | Place de la Bastille | 1 | 1
+Manoir | Le Petit Manoir | 1 | 1
+Saint James | Louvre | 10
+Saint James | Eiffel | 1
+Louvre | Eiffel | 10
+Pont D'alma | Eiffel | 1
+Pont D'alma | Saint James | 1
+Louvre | Notre Dame | 1
+Louvre | Bastille | 1
+Manoir | Bastille | 1
+Manoir | Saint James | 1
