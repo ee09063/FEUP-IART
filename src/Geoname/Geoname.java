@@ -42,6 +42,27 @@ public class Geoname {
 		graph.displaceNodes();
 	}
 	
+	public void getLatLong(Node n){
+		WebService.setUserName("ee09063");
+		
+		ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+		searchCriteria.setQ(n.getAlt());
+		ToponymSearchResult searchResult;
+		try {
+			searchResult = WebService.search(searchCriteria);
+			for (Toponym toponym : searchResult.getToponyms()) {
+				Pair<Double, Double> coord = LatLongToXY(toponym.getLatitude(), toponym.getLongitude());
+				n.setLatitude(toponym.getLatitude());
+				n.setLongitude(toponym.getLongitude());
+				n.setLatLongX(coord.getSecond());
+				n.setLatLongY(coord.getFirst());
+				break;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static Pair<Double, Double> LatLongToXY(double Lat, double Long){
 		double lat = toRadian(Lat);
 		double lon = toRadian(Long);

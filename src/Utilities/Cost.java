@@ -1,5 +1,7 @@
 package Utilities;
 
+import Graph.Node;
+
 public class Cost {
 	/*
 	 * FOR NOW IT'S ONLY A SIMPLE FLOAT
@@ -10,6 +12,11 @@ public class Cost {
 		this.cost=cost;
 	}
 	
+	public Cost(Node nodeA, Node nodeB) {
+		Distance distance = new Distance();
+		this.cost = distance.heuristicCost(nodeA, nodeB);
+	}
+
 	public float getCost(){
 		return this.cost;
 	}

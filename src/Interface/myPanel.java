@@ -27,13 +27,12 @@ public class myPanel extends JPanel {
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		
+
 		Graphics2D g2 = (Graphics2D)g;
+		drawConnectingLine(g2, 0, 0, MAP_SIZE_X, 0, Color.RED);
+		
 		if(myPanel.g_to_draw != null){
 			drawGraph(g2, g_to_draw);
-		}
-		else{
-			g2.drawString("LOAD A GRAPH", 50, 50);
 		}
 	}
 
@@ -82,23 +81,23 @@ public class myPanel extends JPanel {
 		drawOutlineCircle(g, n.getX(), n.getY(), 28, outline);
 		drawCenteredCircle(g, n.getX(), n.getY(), 25, center);
 		drawCenteredText(g, n.getX(), n.getY(), 10, n.getName(), text);
-//		drawOutlineCircle(g, (n.getX()-1)*100+50,
-//				 (n.getY()-1)*100+50, 28, outline);
-//		drawCenteredCircle(g, (n.getX()-1)*100+50,
-//						  (n.getY()-1)*100+50, 25, center);
-//		drawCenteredText(g, (n.getX()-1)*100+50,
-//						(n.getY()-1)*100+50,
-//						10,
-//						n.getName(), text);
+		/*drawOutlineCircle(g, (n.getX()-1)*100+50,
+				 (n.getY()-1)*100+50, 28, outline);
+		drawCenteredCircle(g, (n.getX()-1)*100+50,
+						  (n.getY()-1)*100+50, 25, center);
+		drawCenteredText(g, (n.getX()-1)*100+50,
+						(n.getY()-1)*100+50,
+						10,
+						n.getName(), text);*/
 	}
 	
 	public void drawEdge(Graphics2D g, Edge e, Color color){
 		drawConnectingLine(g, e.getNodeA().getX(), e.getNodeA().getY(), e.getNodeB().getX(), e.getNodeB().getY()-1, color);
-//		drawConnectingLine(g,
-//				   (e.getNodeA().getX()-1)*100+50,
-//				   (e.getNodeA().getY()-1)*100+50,
-//				   (e.getNodeB().getX()-1)*100+50,
-//				   (e.getNodeB().getY()-1)*100+50, color);
+		/*drawConnectingLine(g,
+				   (e.getNodeA().getX()-1)*100+50,
+				   (e.getNodeA().getY()-1)*100+50,
+				   (e.getNodeB().getX()-1)*100+50,
+				   (e.getNodeB().getY()-1)*100+50, color);*/
 	}
 	
 	public void drawCenteredText(Graphics g, int x, int y, float size, String text, Color color) {

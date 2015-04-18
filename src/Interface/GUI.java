@@ -1,7 +1,10 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,12 +18,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import AStar.AStarPathFinder;
@@ -41,6 +51,8 @@ public class GUI implements KeyListener, MouseListener{
 	protected static Graph graph;
 	
 	protected static Thread refreshThread;
+	
+	final static int GAP = 10;
 	
 	private static WindowListener closeWindow = new WindowAdapter() {
         public void windowClosing(WindowEvent e) {
@@ -71,28 +83,36 @@ public class GUI implements KeyListener, MouseListener{
     
     private void initialize(){
     	frame = new JFrame("Tourist Map App");
-    	frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		prepare();
 		
+		Border border = BorderFactory.createLineBorder(Color.RED, 2);
 		map = new myPanel();
+		map.setBorder(border);
 		map.setFocusable(true);
 		map.addKeyListener(this);
 		map.addMouseListener(this);
 		map.requestFocusInWindow();
 		frame.getContentPane().add(map, BorderLayout.CENTER);
+        UserOptions newContentPane = new UserOptions();
+        newContentPane.setOpaque(true);
+        frame.getContentPane().add(newContentPane, BorderLayout.NORTH);
+        frame.setVisible(true);
     }
 	
     protected void prepare(){
     	menu = new JMenuBar();
     	menu_file = new JMenu("File");
     	
+    	//createInterface();
+    	
     	JMenuItem load_map = new JMenuItem("Load Map");
     	load_map.setToolTipText("Load Map");
     	load_map.addActionListener(new ActionListener(){
     		public void actionPerformed(ActionEvent e){
-    			loadAndRun();
+    			loadGraph();
     		}
     	});
     	
@@ -117,9 +137,9 @@ public class GUI implements KeyListener, MouseListener{
     	refreshThread.start();
     }
 	
-    public void loadAndRun(){
+    public void loadGraph(){
     	JFileChooser f = new JFileChooser();
-		f.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		f.setCurrentDirectory(new File(System.getProperty("user.dir") + "/graph"));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT", "txt");
 		f.setFileFilter(filter);
 		int returnVal = f.showOpenDialog(frame);
@@ -134,11 +154,15 @@ public class GUI implements KeyListener, MouseListener{
 				Geoname geoname = new Geoname();
 				try {
 					geoname.getLatLong(graph);
+					/*graph.setDisplaceX(graph.getNodes().get(0).getLatLongX());
+					graph.setDisplaceY(graph.getNodes().get(0).getLatLongY());
+					graph.displaceNodes();*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				myPanel.g_to_draw = graph;
-				//map.repaint();
+				UserOptions.setGraph(graph);
+				map.repaint();
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			} catch (IOException e1) {
@@ -146,12 +170,6 @@ public class GUI implements KeyListener, MouseListener{
 			}
 			
 		}
-		/*
-		 * APPLICATION OF THE ALGORITH GOES HERE
-		 */
-		AStarPathFinder pathFinder = new AStarPathFinder(graph, graph.getNode("Eiffel"));
-		Path path = pathFinder.runAStar(graph.getNode("Bastille"));
-		System.out.println(path);
     }
     
 	@Override
@@ -201,6 +219,4 @@ public class GUI implements KeyListener, MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
-
-	
 }

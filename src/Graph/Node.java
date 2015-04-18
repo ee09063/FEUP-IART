@@ -20,8 +20,8 @@ public class Node implements Comparable<Node>{
 	protected double x;
 	protected double y;
 	
-	private float heuristic;
-	private float cost;
+	private float heuristic;//H
+	private float cost;//G
 	
 	private double latitude;
 	private double longitude;
@@ -38,8 +38,7 @@ public class Node implements Comparable<Node>{
 		this.cost=0;
 		this.heuristic=0;
 		this.paintNode = false;
-	}
-	*/
+	}*/
 	
 	public Node(String name, String alt, int time_cost, int importance){
 		this.name = name;
@@ -76,11 +75,11 @@ public class Node implements Comparable<Node>{
 		return this.time_cost;
 	}
 	
-	public void setCost(float neighborCost){
+	public void setG(float neighborCost){
 		this.cost=neighborCost;
 	}
 	
-	public void setHeuristic(float heuristic){
+	public void setH(float heuristic){
 		this.heuristic=heuristic;
 	}
 	
@@ -117,26 +116,11 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public void setPaintNode(boolean b){
-		this.paintNode = true;
+		this.paintNode = b;
 	}
 	
 	public boolean getPaintNode(){
 		return this.paintNode;
-	}
-	
-	public int compareFValue(Object o) {
-		Node n = (Node) o;
-		
-		float f = heuristic + cost;
-		float of = n.heuristic + n.cost;
-		
-		if (f < of) {
-			return -1;
-		} else if (f > of) {
-			return 1;
-		} else {
-			return 0;
-		}
 	}
 	
 	public int getX(){return (int) this.x;}
@@ -151,8 +135,16 @@ public class Node implements Comparable<Node>{
 		this.y = y;
 	}
 	
-	public float getFValue(){
+	public float getF(){
 		return this.heuristic + this.cost;
+	}
+	
+	public float getH(){
+		return this.heuristic;
+	}
+	
+	public float getG(){
+		return this.cost;
 	}
 	
 	public double getLatitude() {

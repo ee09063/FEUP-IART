@@ -8,8 +8,8 @@ public class NodeComparator implements Comparator<Node> {
 
     @Override
     public int compare(Node n1, Node n2) {
-		float f = n1.getFValue();
-		float of = n2.getFValue();
+		float f = n1.getF();
+		float of = n2.getF();
 		
 		if (f < of) {
 			return -1;

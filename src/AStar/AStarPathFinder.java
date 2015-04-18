@@ -3,16 +3,17 @@ package AStar;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Graph.Edge;
 import Graph.Graph;
 import Graph.Node;
 import Utilities.Cost;
+import Utilities.Distance;
 import Utilities.NodeComparator;
 import Utilities.Pair;
 import Utilities.Path;
 
 public class AStarPathFinder{
 	private ArrayList<Node> closed = new ArrayList<Node>();
-	//private SortedList open = new SortedList();
 	private ArrayList<Node> open = new ArrayList<Node>();
 	@SuppressWarnings("unused")
 	private Path path;
@@ -26,18 +27,17 @@ public class AStarPathFinder{
 	
 	public Path runAStar(Node target){
 		
-		System.out.println("STARTING NODE: " + this.start.getName());
+		clear();
+		
+		System.out.println("STARTING NODE: " + start.getName());
 		System.out.println("TARGET NODE: " + target.getName());
 		
 		closed.clear();
 		open.clear();
-		open.add(this.start);
+		open.add(start);
 		
 		while(open.size() != 0){
 			Node current = open.get(0);
-			/*
-			 * CHECK IF TARGET
-			 */
 			
 			System.out.println("I AM " + current.getName());
 			
@@ -50,7 +50,6 @@ public class AStarPathFinder{
 			closed.add(current);
 			
 			for(Pair<Node,Cost> pair : current.getNeighbourList()){
-				
 				Node neighbor = pair.getFirst();
 				Cost edge = pair.getSecond();
 				boolean neighborIsBetter;
@@ -58,29 +57,27 @@ public class AStarPathFinder{
 				if(closed.contains(neighbor)){
 					continue;
 				}
-				/*
-				 * CALCULATE HOW LONG THE PATH IS
-				 */
-				float neighborCost = neighbor.getTimeCost()
-										+ edge.getCost()
-										+ current.getFValue();
-				System.out.println("I AM " + current.getName() + " COST OF " + neighbor.getName() + " : " + neighborCost);
+				
+				float neighborCost = neighborCost(neighbor, edge, current);
+				System.out.println("G() COST OF " + neighbor.getName() + " : " + neighborCost);
 				
 				if(!open.contains(neighbor)){
 					open.add(neighbor);
 					System.out.println("ADDED " + neighbor.getName() + " TO OPEN LIST");
 					neighborIsBetter = true;
-				} else if(neighborCost < neighbor.getFValue()){
+				} else if(neighborCost < neighbor.getG()){
 					neighborIsBetter = true;
-					System.out.println("I AM " + current.getName() + " WILL UPDATE " + neighbor.getName());
+					System.out.println("WILL UPDATE " + neighbor.getName());
 				} else {
 					neighborIsBetter = false;
-					System.out.println("I AM " + current.getName() + " WILL NOT UPDATE " + neighbor.getName());
+					System.out.println("WILL NOT UPDATE " + neighbor.getName());
 				}
 				if(neighborIsBetter){
 					neighbor.setParent(current);
-					neighbor.setCost(neighborCost);
-					//neighbor.setHeuristic(heuristic);
+					neighbor.setG(neighborCost);
+					//float heuristicCost = heuristicCost(neighbor, target);
+					//neighbor.setH(heuristicCost);
+					//System.out.println("THE HEURISTIC OF " + neighbor.getName() + " IS " + heuristicCost);
 				}
 			}
 			Collections.sort(open, new NodeComparator());
@@ -97,6 +94,26 @@ public class AStarPathFinder{
 		this.path = path;
 		path.paintEdges();
 		return path;
+	}
+	
+	private float neighborCost(Node neighbor, Cost edge, Node current){
+		float neighborCost = neighbor.getTimeCost() + edge.getCost() + current.getG();
+		return neighborCost;
+	}
+	
+	private float heuristicCost(Node current, Node target){
+		Distance distance = new Distance();
+		return distance.heuristicCost(current, target);
+	}
+	
+	private void clear(){
+		for(Node n : graph.getNodes()){
+			n.setPaintNode(false);
+			n.setParent(null);
+		}
+		for(Edge e : graph.getEdges()){
+			e.setPaint(false);
+		}
 	}
 	
 	protected Node getFirstInOpen() {

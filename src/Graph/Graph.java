@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import Geoname.Geoname;
 import Interface.myPanel;
 import Utilities.Cost;
 import Utilities.Pair;
@@ -51,6 +52,14 @@ public class Graph {
 	public void contructNeighbours(){
 		for(Node n : this.nodes){
 			n.setNeighbourList(getAdj(n));
+			/*for(Node ne : this.nodes){
+				if(!ne.equals(n)){
+					Cost cost = new Cost(n, ne);
+					n.addNeighbour(ne, cost);
+					Edge edge = new Edge(n, ne, cost);
+					this.edges.add(edge);
+				}
+			}*/
 		}
 	}
 	/*
@@ -60,18 +69,12 @@ public class Graph {
 				System.out.println(line);
 				String[] info = line.split(Pattern.quote("|"));
 				if(info.length == 5){
-					/*
-					 * NODE -> NAME, TIME, IMPORTANCE, X, Y
-					 *//*
 					Node n = new Node(info[0].trim(),
 									  Integer.parseInt(info[1].trim()),
 									  Integer.parseInt(info[2].trim()),
 									  Integer.parseInt(info[3].trim()),
 									  Integer.parseInt(info[4].trim()));
 					this.nodes.add(n);
-					/*
-					 * EDGE -> NODE A, NODE B, COST
-					 *//*
 				} else if(info.length == 3){
 					String nodeNameA = info[0];
 					String nodeNameB = info[1];
@@ -88,9 +91,6 @@ public class Graph {
 					System.err.println("Error parsing line : " + line);
 				}
 			}
-			/*
-			 * BUILD THE NEIGHBORS
-			 *//*
 			this.contructNeighbours();
 			System.out.println("Finished importing Graph. Node Size : " + this.nodes.size() + " Edge Size : " + this.edges.size());
 		}
@@ -99,17 +99,15 @@ public class Graph {
 	public Graph(File file) throws FileNotFoundException, IOException{
 		try(BufferedReader reader = new BufferedReader(new FileReader(file))){
 			for(String line; (line = reader.readLine()) != null; ){
-				//System.out.println(line);
 				String[] info = line.split(Pattern.quote("|"));
 				if(info.length == 4){
-					/*
-					 * NODE -> NAME ALT TIME IMPORTANCE
-					 */
 					Node n = new Node(info[0].trim(),
 							         (info[1].trim()),
 							          Integer.parseInt(info[2].trim()),
 							          Integer.parseInt(info[3].trim()));
 					this.nodes.add(n);
+					/*Geoname geoname = new Geoname();
+					geoname.getLatLong(n);*/
 				} else if(info.length == 3){
 					String nodeNameA = info[0];
 					String nodeNameB = info[1];
