@@ -59,7 +59,7 @@ public class AStarPathFinder{
 				}
 				
 				float neighborCost = neighborCost(neighbor, edge, current);
-				System.out.println("G() COST OF " + neighbor.getName() + " : " + neighborCost);
+				System.out.println("G() COST OF " + neighbor.getName() + " : " + neighborCost +  " vs. " + neighbor.getG());
 				
 				if(!open.contains(neighbor)){
 					open.add(neighbor);

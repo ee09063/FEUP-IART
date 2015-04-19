@@ -12,7 +12,7 @@ Saint James | Eiffel | 1
 Saint James | Manoir | 1
 Saint James | Basillica | 1
 Eiffel | Pont D'Alma | 1
-Eiffel | Notre Dame | 5
+Eiffel | Notre Dame | 3
 Louvre | Notre Dame | 1
 Louvre | Bastille | 1
 Pont D'Alma | Basillica | 1
