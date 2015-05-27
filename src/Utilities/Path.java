@@ -2,16 +2,17 @@ package Utilities;
 
 import java.util.ArrayList;
 
-import Graph.Edge;
-import Graph.Graph;
 import Graph.Node;
 
 public class Path {
-	private ArrayList<Node> path = new ArrayList<Node>();
-	private Graph graph;
+	public ArrayList<Node> path = new ArrayList<Node>();
 	
-	public Path(Graph graph){
-		this.graph = graph;
+	public Path(){
+		
+	}
+	
+	public Path(ArrayList<Node> nodes){
+		this.path = nodes;
 	}
 	
 	public int getLength(){
@@ -22,35 +23,21 @@ public class Path {
 		return path.get(index);
 	}
 	
+	public void removeNode(int index){
+		path.remove(index);
+	}
+	
+	public void removeNode(Node node){
+		path.remove(node);
+	}
+	
 	public void append(Node n){
 		path.add(n);
 	}
 	
 	public void prepend(Node n){
 		path.add(0, n);
-		/*
-		 * 
-		 */
 		n.setPaintNode(true);
-	}
-	
-	public void paintEdges(){
-		for(Edge e : this.graph.getEdges()){
-			Node a = e.getNodeA();
-			Node b = e.getNodeB();
-			if(a.getPaintNode() && b.getPaintNode()){
-				if(a.getParent()!=null){
-					if(a.getParent().equals(b)){
-						e.setPaint(true);
-					}
-				}
-				if(b.getParent()!=null){
-					if(b.getParent().equals(a)){
-						e.setPaint(true);
-					}
-				}
-			}
-		}
 	}
 	
 	public boolean contains(Node n){
@@ -64,8 +51,26 @@ public class Path {
 	public String toString(){
 		String str = "";
 		for(Node n : path){
-			str += n.getName() + "->";
+			str += n.getName() + "\n";
 		}
 		return str;
+	}
+	
+	public Node closestNode(Node origin, ArrayList<Node> path){
+		//System.out.println(path);
+		Node closest = null;
+		float minDistance = Float.MAX_VALUE;
+		
+		for(int i = 0; i < path.size()-1; i++){
+			float dist = Distance.timeToTarget(origin, path.get(i));
+			if(dist < minDistance){
+				minDistance = dist;
+				closest = path.get(i);
+			}
+		}
+		if(closest == null){
+			return path.get(0);
+		}
+		return closest;
 	}
 }

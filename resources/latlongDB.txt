@@ -1,0 +1,14 @@
+Saint James Spa France | 48.8641 | 2.3307
+Louvre Museum France | 48.86102 | 2.33587
+Tour Eiffel | 48.85832 | 2.29452
+Alma Paris France | 48.86348 | 2.30161
+Notre Dame | 48.85296 | 2.35007
+Place de la Bastille | 48.85311 | 2.36916
+Le Petit Manoir | 48.8765 | 2.3475
+basilica paris france | 48.88665 | 2.34295
+champ de mars paris france | 48.856111 | 2.297778
+Cimetiere du Pere Lachaise | 48.860556 | 2.394722
+Musée Carnavalet | 48.8574 | 2.3621
+Parc des Buttes-Chaumont | 48.88 | 2.383056
+Jardin des Tuileries | 48.863056 | 2.328333
+Arènes de Lutèce | 48.844444 | 2.3525

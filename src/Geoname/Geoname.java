@@ -25,14 +25,11 @@ public class Geoname {
 			searchCriteria.setQ(n.getAlt());
 			ToponymSearchResult searchResult = WebService.search(searchCriteria);
 			for (Toponym toponym : searchResult.getToponyms()) {
-				//System.out.println(toponym.getName()+" "+ toponym.getCountryName());
-				//System.out.println(toponym.getLatitude() + " " +  toponym.getLongitude());
 				Pair<Double, Double> coord = LatLongToXY(toponym.getLatitude(), toponym.getLongitude());
 				n.setLatitude(toponym.getLatitude());
 				n.setLongitude(toponym.getLongitude());
 				n.setLatLongX(coord.getSecond());
 				n.setLatLongY(coord.getFirst());
-				//System.out.println("CONVERSION OF " + n.getName() + " " + n.getLatLongX() + " " + n.getLatLongY());
 				break;
 			}
 		}
@@ -63,11 +60,27 @@ public class Geoname {
 		}
 	}
 	
+	public Pair<Double, Double> getLatLong(String string){
+		WebService.setUserName("ee09063");
+		
+		ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+		searchCriteria.setQ(string);
+		ToponymSearchResult searchResult;
+		try {
+			searchResult = WebService.search(searchCriteria);
+			for (Toponym toponym : searchResult.getToponyms()) {
+				Pair<Double, Double> coord = LatLongToXY(toponym.getLatitude(), toponym.getLongitude());
+				return new Pair<Double, Double>(toponym.getLatitude(), toponym.getLongitude());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static Pair<Double, Double> LatLongToXY(double Lat, double Long){
 		double lat = toRadian(Lat);
 		double lon = toRadian(Long);
-		/*double lon = Long;
-		double lat = Lat;*/
 		double x = R * java.lang.Math.cos(lat) * java.lang.Math.cos(lon);
 		double y = R * java.lang.Math.cos(lat) * java.lang.Math.sin(lon);
 		Pair<Double, Double> coord = new Pair<Double, Double>(x,y);
@@ -78,14 +91,3 @@ public class Geoname {
 		return value * (Math.PI / 180.0);
 	}
 }
-
-/*
-ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-searchCriteria.setQ("Saint James Spa France");
-ToponymSearchResult searchResult = WebService.search(searchCriteria);
-for (Toponym toponym : searchResult.getToponyms()) {
-	//System.out.println(toponym.getName()+" "+ toponym.getCountryName());
-	//System.out.println(toponym.getLatitude() + " " +  toponym.getLongitude());
-	Pair<Double, Double> coord = LatLongToXY(toponym.getLatitude(), toponym.getLongitude());
-	System.out.println(coord.getFirst() + " " + coord.getSecond());
-}*/

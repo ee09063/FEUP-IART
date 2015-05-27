@@ -1,86 +1,59 @@
 package Graph;
 
-import java.util.ArrayList;
-
-import Utilities.Cost;
-import Utilities.Pair;
-
 public class Node implements Comparable<Node>{
 	
 	private String name;
 	private String alt;
-	private int time_cost;
+	private int visitingTime;
 	private int importance;
 	protected boolean visited;
-	protected boolean enjoyed;
 	protected boolean paintNode;
 	protected Node parent;
-	private ArrayList<Pair<Node,Cost>> neighbours = new ArrayList<Pair<Node,Cost>>();
 	
 	protected double x;
 	protected double y;
+	protected double a;
 	
-	private float heuristic;//H
-	private float cost;//G
+	private float futureCost;//H
+	private float currentCost;//G
+	private float totalTimeSpent;
 	
 	private double latitude;
 	private double longitude;
 	private double latLongX;
 	private double latLongY;
-	/*
-	public Node(String name, int time_cost, int importance, double x, double y){
-		this.name = name;
-		this.time_cost = time_cost;
-		this.importance = importance;
-		this.x = x;
-		this.y = y;
-		this.parent = null;
-		this.cost=0;
-		this.heuristic=0;
-		this.paintNode = false;
-	}*/
 	
 	public Node(String name, String alt, int time_cost, int importance){
 		this.name = name;
 		this.alt = alt;
-		this.time_cost = time_cost;
-		this.importance = importance;
+		this.setVisitingTime(time_cost);
+		this.importance = -importance;
 		this.parent = null;
-		this.cost=0;
-		this.heuristic=0;
+		this.currentCost=0;
+		this.futureCost=0;
 		this.paintNode = false;
+		this.totalTimeSpent = 0;
+		this.visited=false;
+		this.latitude = 0;
+		this.longitude = 0;
+		this.latLongX = 0;
+		this.latLongY = 0;
 	}
 	
-	public boolean isVisited(){
+	public boolean Visited(){
 		return this.visited;
 	}
 	
-	public void visit(){
-		this.visited = true;
+	public void setVisited(boolean visited){
+		this.visited = visited;
 	}
 	
-	public void unvisit(){
-		this.visited = false;
+	public void setG(float currentCost){
+		this.currentCost=currentCost;
 	}
 	
-	public boolean isEnjoyed(){
-		return this.enjoyed;
-	}
-	
-	public void enjoy(){
-		this.enjoyed = true;
-	}
-	
-	public int getTimeCost(){
-		return this.time_cost;
-	}
-	
-	public void setG(float neighborCost){
-		this.cost=neighborCost;
-	}
-	
-	public void setH(float heuristic){
-		this.heuristic=heuristic;
+	public void setH(float futureCost){
+		this.futureCost=futureCost;
 	}
 	
 	public int getImportance(){
@@ -101,18 +74,6 @@ public class Node implements Comparable<Node>{
 	
 	public String getName(){
 		return this.name;
-	}
-
-	public void addNeighbour(Node n, Cost c){
-		this.neighbours.add(new Pair<Node,Cost>(n,c));
-	}
-	
-	public ArrayList<Pair<Node,Cost>> getNeighbourList(){
-		return this.neighbours;
-	}
-	
-	public void setNeighbourList(ArrayList<Pair<Node,Cost>> list){
-		this.neighbours = list;
 	}
 	
 	public void setPaintNode(boolean b){
@@ -136,15 +97,15 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public float getF(){
-		return this.heuristic + this.cost;
+		return this.currentCost + this.futureCost;
 	}
 	
 	public float getH(){
-		return this.heuristic;
+		return this.futureCost;
 	}
 	
 	public float getG(){
-		return this.cost;
+		return this.currentCost;
 	}
 	
 	public double getLatitude() {
@@ -193,5 +154,33 @@ public class Node implements Comparable<Node>{
 
 	public void setAlt(String alt) {
 		this.alt = alt;
+	}
+
+	public float getTotalTimeSpent() {
+		return totalTimeSpent;
+	}
+
+	public void setTotalTimeSpent(float totalTimeSpent) {
+		this.totalTimeSpent = totalTimeSpent;
+	}
+
+	public int getVisitingTime() {
+		return visitingTime;
+	}
+
+	public void setVisitingTime(int visitingTime) {
+		this.visitingTime = visitingTime;
+	}
+	
+	public double getA(){
+		return this.a;
+	}
+	
+	public void setA(double a){
+		this.a = a;
+	}
+	
+	public void setImportance(int i){
+		this.importance = i;
 	}
 }

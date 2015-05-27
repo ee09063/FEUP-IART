@@ -1,21 +1,13 @@
-Saint James | Saint James Spa France | 0 | 1
-Louvre | Louvre Museum France | 1 | 1
-Eiffel | Tour Eiffel | 1 | 1
-Pont D'Alma | Alma Paris France | 1 | 1
-Notre Dame | Notre Dame | 1 | 1
-Bastille | Place de la Bastille | 1 | 1
-Manoir | Le Petit Manoir | 1 | 1
-Basillica | basilica paris france | 1 | 1
-Saint James | Louvre | 1
-Saint James | Pont D'Alma | 1
-Saint James | Eiffel | 1
-Saint James | Manoir | 1
-Saint James | Basillica | 1
-Eiffel | Pont D'Alma | 1
-Eiffel | Notre Dame | 3
-Louvre | Notre Dame | 1
-Louvre | Bastille | 1
-Pont D'Alma | Basillica | 1
-Manoir | Basillica | 1
-Manoir | Bastille | 1
-Notre Dame | Bastille | 1
+Saint James | Saint James Spa France | 0 | 0
+Louvre | Louvre Museum France | 10 | 3
+Eiffel | Tour Eiffel | 10 | 1
+D'Alma Bridge | Alma Paris France | 10 | 4
+Notre Dame | Notre Dame | 10 | 1
+Bastille | Place de la Bastille | 10 | 5
+Manoir | Le Petit Manoir | 10 | 2
+Basillica | basilica paris france | 10 | 5
+Mars Fields | champ de mars paris france | 10 | 3
+Pere Lachaise Cemetery| Cimetiere du Pere Lachaise | 10 | 3
+Carnavalet Museum | Musée Carnavalet | 10 | 5
+Buttes-Chaumont Park | Parc des Buttes-Chaumont | 10 | 1
+Lutèce Arena | Arènes de Lutèce | 10 | 5
