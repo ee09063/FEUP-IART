@@ -1,9 +1,12 @@
 package GUI;
 
+import java.text.DecimalFormat;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import Utilities.Path;
 
 public class PathOutput_FlowPane{
 
@@ -12,15 +15,11 @@ public class PathOutput_FlowPane{
 	FlowPane addFlowPane(){
     	
     	FlowPane flow = new FlowPane();
-    	flow.setPrefWidth(Tourist.width*0.15);
+    	flow.setPrefSize(Tourist.width*0.1, Tourist.height*0.9);
     	
     	HBox box = new HBox();
-    	box.setPrefWidth(Tourist.width*0.15);
-    	box.setPrefHeight(Tourist.height*0.9);
-    	box.setPadding(new Insets(10,Tourist.width*0.06,Tourist.height*0.06,0));
-    	
-    	paths.setPrefHeight(Tourist.height*0.8);
-    	paths.setPrefWidth(Tourist.width*0.15);
+    	box.setPrefSize(Tourist.width*0.1, Tourist.height*0.9);
+    	box.setPadding(new Insets(10,10,0,0));
     	
     	box.getChildren().add(paths);
     	
@@ -32,15 +31,23 @@ public class PathOutput_FlowPane{
 	public static void printPaths(){
 		paths.clear();
 		if(Tourist.alt_path){
-			for(int i = 0; i < Tourist.ptd_alt.size(); i++){
+			for(int i = 0; i < TopMenu.ptd_alt.size(); i++){
 				paths.appendText("--- Day " + (i + 1) + " --- " + Tourist.colorNames[i] + "\n\n");
-				paths.appendText(Tourist.ptd_alt.get(i).toString()+"\n");
-			}
+				paths.appendText(TopMenu.ptd_alt.get(i).toString()+"\n");
+			}		
 		} else {
-			for(int i = 0; i < Tourist.ptd.size(); i++){
+			DecimalFormat df = new DecimalFormat();
+			df.setMaximumFractionDigits(2);
+			for(int i = 0; i < TopMenu.ptd.size(); i++){
+				Path p = TopMenu.ptd.get(i);
 				paths.appendText("--- Day " + (i + 1) + " --- " + Tourist.colorNames[i] + "\n\n");
-				paths.appendText(Tourist.ptd.get(i).toString()+"\n");
+				paths.appendText(p.toString()+"\n");
+				paths.appendText("Total Time: " + df.format(p.totalTime) +"\n\n");
 			}
 		}
+	}
+	
+	public static void resizePane(){
+		paths.setPrefSize(0, 0);
 	}
 }

@@ -8,18 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import GUI.Tourist;
-import Utilities.Distance;
-import Utilities.LatLongLoader;
+
+
+import Database.LatLongLoader;
 
 public class Graph {
 	
-	public double DISPLACE_X = 0.13;
-	public double DISPLACE_Y = 0.13;
-	public double MOUSE_DISP_X = 0.0;
-	public double MOUSE_DISP_Y = 0.0;
-	public double HEIGHT;
-	public double WIDTH;
+	public static double DISPLACE_X = 0.13;
+	public static double DISPLACE_Y = 0.13;
+	public static double MOUSE_DISP_X = 0.0;
+	public static double MOUSE_DISP_Y = 0.0;
+	public static double HEIGHT;
+	public static double WIDTH;
 	protected ArrayList<Node> nodes = new ArrayList<Node>();
 	
 	public ArrayList<Node> getNodes(){return this.nodes;}
@@ -27,10 +27,10 @@ public class Graph {
 	private double displaceX;
 	private double displaceY;
 	
-	public Graph(File file) throws FileNotFoundException, IOException{
+	public Graph(File file, double width, double height) throws FileNotFoundException, IOException{
 		
-		HEIGHT = Tourist.canvas.getHeight();
-		WIDTH = Tourist.canvas.getWidth();
+		WIDTH = width;
+		HEIGHT = height;
 		
 		try(BufferedReader reader = new BufferedReader(new FileReader(file))){
 			for(String line; (line = reader.readLine()) != null; ){

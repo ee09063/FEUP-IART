@@ -2,25 +2,15 @@ package GUI;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import AStar.AStar;
-import Graph.Graph;
-import Utilities.Path;
 
 public class Tourist extends Application {
     
@@ -28,13 +18,8 @@ public class Tourist extends Application {
 	public static double width;
 	public static double height;
 	
-	
-	
 	public static Canvas canvas;
 	static Slider zoom;
-	
-	public static ArrayList<Path> ptd = new ArrayList<Path>();
-	public static ArrayList<Path> ptd_alt = new ArrayList<Path>();
 	
 	public static Color[] colors = {Color.GREEN, Color.BLUE, Color.ORANGE,
 			Color.MAGENTA, Color.RED, Color.YELLOW,
@@ -61,8 +46,8 @@ public class Tourist extends Application {
         HBox menu = new TopMenu().addHBox(stage);
         border.setTop(menu);
         
-        border.setRight(new PathOutput_FlowPane().addFlowPane());
         border.setCenter(new Drawing_Canvas().addCanvas());
+        border.setRight(new PathOutput_FlowPane().addFlowPane());
         
         Scene scene = new Scene(border, width-50, height-50);
         stage.setScene(scene);

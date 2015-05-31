@@ -27,10 +27,13 @@ public class Drawing_Canvas {
 	
 	static GraphicsContext gc;
 	
+	static int OUTER_SIZE = 115;
+	static int INNER_SIZE = 100;
+	
 	Node selectedNode = null;
 	
 	HBox addCanvas(){
-		Tourist.canvas = new Canvas(Tourist.width*0.85, Tourist.height*0.85);
+		Tourist.canvas = new Canvas(Tourist.width*0.88, Tourist.height*0.85);
 		gc = Tourist.canvas.getGraphicsContext2D();
 		
     	HBox outer = new HBox();
@@ -43,13 +46,25 @@ public class Drawing_Canvas {
     	
     	final ContextMenu contextMenu = new ContextMenu();
     	
+    	MenuItem i0 = new MenuItem("0");
     	MenuItem i1 = new MenuItem("1");
     	MenuItem i2 = new MenuItem("2");
     	MenuItem i3 = new MenuItem("3");
     	MenuItem i4 = new MenuItem("4");
     	MenuItem i5 = new MenuItem("5");
     	
-    	contextMenu.getItems().addAll(i1, i2, i3, i4, i5);
+    	contextMenu.getItems().addAll(i0, i1, i2, i3, i4, i5);
+    	
+    	i0.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override
+    	    public void handle(ActionEvent event) {
+    	        if(selectedNode != null){
+    	        	selectedNode.setImportance(0);
+    	        	selectedNode = null;
+    	        	paint();
+    	        }
+    	    }
+    	});
     	
     	i1.setOnAction(new EventHandler<ActionEvent>() {
     	    @Override
@@ -122,8 +137,8 @@ public class Drawing_Canvas {
 	        	  if(e.isPrimaryButtonDown()){
 		              double deltaX = mouseX - e.getX();
 		              double deltaY = mouseY - e.getY();
-		              TopMenu.graph.MOUSE_DISP_X = deltaX;
-		              TopMenu.graph.MOUSE_DISP_Y = deltaY;
+		              Graph.MOUSE_DISP_X = deltaX;
+		              Graph.MOUSE_DISP_Y = deltaY;
 		              TopMenu.graph.displaceNodes();
 		              paint();
 	        	  }
@@ -162,16 +177,16 @@ public class Drawing_Canvas {
     	if(TopMenu.graph != null){
 			drawGraph(TopMenu.graph);
 		}
-    	if(!Tourist.alt_path && Tourist.ptd.size() != 0){	
-			for(int i = Tourist.ptd.size()-1; i >= 0; i--){
-				Path path = Tourist.ptd.get(i);
+    	if(!Tourist.alt_path && TopMenu.ptd.size() != 0){	
+			for(int i = TopMenu.ptd.size()-1; i >= 0; i--){
+				Path path = TopMenu.ptd.get(i);
 				if(path.getLength() > 2){
 					drawPath(path, i);
 				}
 			}
-    	} else if(Tourist.alt_path && Tourist.ptd_alt.size() != 0){
-    		for(int i = Tourist.ptd_alt.size()-1; i >= 0; i--){
-				Path path = Tourist.ptd_alt.get(i);
+    	} else if(Tourist.alt_path && TopMenu.ptd_alt.size() != 0){
+    		for(int i = TopMenu.ptd_alt.size()-1; i >= 0; i--){
+				Path path = TopMenu.ptd_alt.get(i);
 				if(path.getLength() > 2){
 					drawPath(path, i);
 				}
@@ -180,35 +195,36 @@ public class Drawing_Canvas {
 		
     }
     
-    private static void drawCenteredCircle(int x, int y, int r, Color color){
-    	x = x-(r);
-		y = y-(r);
+    private static void drawCenteredCircle(double x, double y, double d, Color color){
+    	x = x-(d);
+		y = y-(d);
 		
 		gc.setFill(color);
-		gc.fillOval(x,y,r*2,r*2);
+		gc.fillOval(x,y,d*2,d*2);
     }
     
-    public static void drawConnectingLine(int x1, int y1, int x2, int y2, Color color){
+    public static void drawConnectingLine(double x1, double y1, double x2, double y2, Color color){
 		gc.setLineWidth(2);
     	gc.setStroke(color);
 		gc.strokeLine(x1, y1, x2, y2);
 	}
     
-    public static void drawNode(Node n, Color outline, Color center, Color text){
-    	if(n.getName().equals(TopMenu.hotel.getText()) && Tourist.ptd.size() != 0){
-    		drawPathOrigin(n.getX(), n.getY(),15);
+    public static void drawNode(Node n, Color outline, Color center, Color text){	
+    	double rad = OUTER_SIZE * Graph.DISPLACE_X;
+    	if(n.getName().equals(TopMenu.hotel.getText()) && TopMenu.ptd.size() != 0){
+    		drawPathOrigin(n.getX(), n.getY(), rad);
     	} else {
-    		drawCenteredCircle(n.getX(), n.getY(), 15, outline);
+    		drawCenteredCircle(n.getX(), n.getY(), rad, outline);
     	}
-    	drawCenteredCircle(n.getX(), n.getY(), 13, center);
-		drawCenteredText(n.getX(), n.getY()+40, 15, n.getName(), text);
-		drawCenteredText(n.getX(), n.getY(), 15, new String(""+(-n.getImportance())), text);
+    	drawCenteredCircle(n.getX(), n.getY(), INNER_SIZE * Graph.DISPLACE_X, center);
+		drawCenteredText(n.getX(), n.getY() + (rad*2), n.getName(), text);
+		drawCenteredText(n.getX(), n.getY(), new String(""+(-n.getImportance())), text);
 	}
     
-    public static void drawCenteredText(int x, int y, float size, String text, Color color) {
+    public static void drawCenteredText(double x, double y, String text, Color color) {
     	gc.setTextAlign(TextAlignment.CENTER);
     	gc.setFill(Color.BLACK);
-    	gc.setFont(new Font("Verdana",12));
+    	gc.setFont(new Font("Verdana", (INNER_SIZE * Graph.DISPLACE_X)-1));
     	gc.fillText(text, x, y);
 	}
     
@@ -231,14 +247,14 @@ public class Drawing_Canvas {
 	}
     
 	
-	private static void drawPathOrigin(int x, int y, int r){
-		x = x-(r);
-		y = y-(r);
-		double arc = 360.0 / Tourist.ptd.size();
-		for(int i = 0; i < Tourist.ptd.size(); i++){
+	private static void drawPathOrigin(double x, double y, double d){
+		x = x-(d);
+		y = y-(d);
+		double arc = 360.0 / TopMenu.ptd.size();
+		for(int i = 0; i < TopMenu.ptd.size(); i++){
 			gc.setStroke(Tourist.colors[i]);
 			gc.setLineWidth(5);
-			gc.strokeArc(x, y, r*2,r*2, i*arc, arc, ArcType.OPEN);
+			gc.strokeArc(x, y, d*2,d*2, i*arc, arc, ArcType.OPEN);
 		}
 	}
 	
@@ -248,10 +264,10 @@ public class Drawing_Canvas {
 	
 	private static Node isNode(double x, double y){
 		Rectangle click = new Rectangle(x-10,y-10,1,1);
-		gc.fillRect(x-10,y-10,1,1);
 		if(TopMenu.graph != null){
+			double rad = OUTER_SIZE * Graph.DISPLACE_X;
 			for(Node nd : TopMenu.graph.getNodes()){
-				Rectangle rn = new Rectangle(nd.getX()-15, nd.getY()-15, 30, 30);
+				Rectangle rn = new Rectangle(nd.getX()-rad, nd.getY()-rad, rad*2, rad*2);
 				if(rn.getBoundsInLocal().intersects(click.getBoundsInLocal())){
 					return nd;
 				}

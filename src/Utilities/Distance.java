@@ -4,9 +4,13 @@ import Graph.Node;
 
 public class Distance {
 	
-	private final static double STEP = 1.4;
+	public double STEP;
 	
-	public static float timeToTarget(Node current, Node target){
+	public Distance(double step){
+		STEP = step;
+	}
+	
+	public float timeToTarget(Node current, Node target){
 		int R = 6371000;
 		double phi1 = toRadian(target.getLatitude());
 		double phi2 = toRadian(current.getLatitude());
@@ -20,11 +24,11 @@ public class Distance {
 		return (float) ((d/STEP)/60.0);
 	}
 	
-	public static double toRadian(double value){
+	public double toRadian(double value){
 		return value * (Math.PI / 180.0);
 	}
 	
-	public static double distanceToTarget(Node current, Node target){
+	public double distanceToTarget(Node current, Node target){
 		int R = 6371000;
 		double phi1 = toRadian(current.getLatitude());
 		double phi2 = toRadian(target.getLatitude());

@@ -3,11 +3,11 @@ package AStar;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Comparators.NodeComparator;
 import Graph.Graph;
 import Graph.Node;
 import Utilities.Angle;
 import Utilities.Distance;
-import Utilities.NodeComparator;
 import Utilities.Path;
 
 public class AStar{
@@ -19,11 +19,13 @@ public class AStar{
 	private Node start;
 	
 	private int TIME_LIMIT;
+	private double step;
 	
-	public AStar(Graph g, Node start, int timeLimit) {
+	public AStar(Graph g, Node start, int timeLimit, double step) {
 		graph = g;
 		this.start = start;
 		this.TIME_LIMIT = timeLimit;
+		this.step = step;
 		
 		new Angle().calculateAngles(start, graph.getNodes());
 	}
@@ -34,22 +36,17 @@ public class AStar{
 		open.clear();
 		open.add(start);
 		Node current = null;
-		
+	
 		while(open.size() != 0){
 			current = open.get(0);
-			/*System.out.println("-----------------------------------");
-			System.out.println("I AM " + current.getName() + " IMPORTANCE: " + current.getG() +
-					           " TIME: " + current.getTotalTimeSpent() + " + " + Distance.timeToTarget(current, target) + " = " +
-					           (current.getTotalTimeSpent() + Distance.timeToTarget(current, target)));*/
-			
 			open.remove(current);
 			closed.add(current);
-
+			
 			ArrayList<Node> neighbors = gatherValidNeighbors(current, target);
 			
 			if(neighbors.size() > 0){
 				for(Node neighbor : neighbors){
-					boolean neighborIsBetter = false;
+					boolean updateNeighbor = false;
 					
 					if(closed.contains(neighbor)){
 						continue;
@@ -59,49 +56,44 @@ public class AStar{
 					
 					if(!open.contains(neighbor)){
 						open.add(neighbor);
-						neighborIsBetter = true;
+						updateNeighbor = true;
 					} else if(neighborCost < neighbor.getG()){
-						neighborIsBetter = true;
-						//System.out.println("WILL UPDATE " + neighbor.getName());
+						updateNeighbor = true;
 					} else {
-						neighborIsBetter = false;
-						//System.out.println("WILL NOT UPDATE " + neighbor.getName());
+						updateNeighbor = false;
 					}
-					if(neighborIsBetter){
+					if(updateNeighbor){
 						neighbor.setParent(current);
 						neighbor.setG(neighborCost);
+						Distance dist = new Distance(this.step);
+						neighbor.setTotalTimeSpent(current.getTotalTimeSpent() +
+				                                   neighbor.getVisitingTime() +
+				                                   dist.timeToTarget(current, neighbor));
 						float futureCost = futureCost(neighbor, target);
 						neighbor.setH(futureCost);
-						neighbor.setTotalTimeSpent(neighbor.getParent().getTotalTimeSpent() +
-								                   neighbor.getVisitingTime() +
-								                   Distance.timeToTarget(current, neighbor));
-						/*System.out.println("TOTAL TIME OF " + neighbor.getName() + ": " + neighbor.getTotalTimeSpent() + " + " + Distance.timeToTarget(neighbor, target) +
-								           " = " + (neighbor.getTotalTimeSpent() + Distance.timeToTarget(neighbor, target)));*/
 					}
 				}
 			} else if(neighbors.size() == 0){
 				target.setParent(current);
-				//System.out.println("NO MORE VALID NODES, BUILDING PATH");
 				return reconstructPath(target, graph, target);
 			}
-			Collections.sort(open, new NodeComparator(current));
-			//System.out.println("-----------------------------------");
+			Collections.sort(open, new NodeComparator(current, step));
 		}
 		target.setParent(current);
-		//System.out.println("OPEN LIST EMPTY");
 		return reconstructPath(target, graph, target);
 	}
 	
 	ArrayList<Node> gatherValidNeighbors(Node current, Node target){
 		ArrayList<Node> list = new ArrayList<Node>();
+		
+		Distance dist = new Distance(this.step);
+		
 		for(Node n : graph.getNodes()){
-			if(!closed.contains(n) && !n.Visited()){
+			if(!closed.contains(n) && !n.Visited() && n != current){
 				float pathCost = current.getTotalTimeSpent() + n.getVisitingTime() +
-						Distance.timeToTarget(n, target) + Distance.timeToTarget(current, n);
-				if(pathCost < TIME_LIMIT){
+						         dist.timeToTarget(n, target) + dist.timeToTarget(current, n);
+				if(pathCost <= TIME_LIMIT){
 					list.add(n);
-				} else {
-					//System.out.println(n.getName() + " IS NOT A VALID NEIGHBOR. TIME: " + pathCost);
 				}
 			}
 		}

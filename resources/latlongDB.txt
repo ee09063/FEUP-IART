@@ -8,7 +8,12 @@ Le Petit Manoir | 48.8765 | 2.3475
 basilica paris france | 48.88665 | 2.34295
 champ de mars paris france | 48.856111 | 2.297778
 Cimetiere du Pere Lachaise | 48.860556 | 2.394722
-Musée Carnavalet | 48.8574 | 2.3621
+Musee Carnavalet | 48.8574 | 2.3621
 Parc des Buttes-Chaumont | 48.88 | 2.383056
-Jardin des Tuileries | 48.863056 | 2.328333
-Arènes de Lutèce | 48.844444 | 2.3525
+Arenes de Lutece | 48.844444 | 2.3525
+arc triomphe paris france | 48.87386 | 2.29507
+place des vosges paris franc | 48.85564 | 2.36554
+Musee Bourdelle | 48.8431 | 2.3183
+Jardin des Tuileries | 48.86308 | 2.32841
+catacombes paris france | 48.83414 | 2.33256
+musee jacquemart andre | 48.8754 | 2.3105

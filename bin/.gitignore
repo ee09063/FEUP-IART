@@ -1,4 +1,6 @@
 /GUI/
-/Utilities/
-/AStar/
 /Graph/
+/AStar/
+/Utilities/
+/Database/
+/Comparators/

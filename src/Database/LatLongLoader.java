@@ -1,4 +1,4 @@
-package Utilities;
+package Database;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import Utilities.Pair;
 import Geoname.Geoname;
 import Graph.Graph;
 import Graph.Node;
@@ -27,8 +28,6 @@ public class LatLongLoader {
 		ArrayList<Node> list = graph.getNodes();
 		loadFromDB(list);
 		loadFromGeonames(list);
-		//graph.setDisplaceX(graph.getNodes().get(0).getLatLongX());
-		//graph.setDisplaceY(graph.getNodes().get(0).getLatLongY());
 		getExtrNodes(graph);
 		graph.displaceNodes();
 	}
@@ -70,7 +69,7 @@ public class LatLongLoader {
 	
 	private static  void addToDB(Node n){
 		try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("resources\\latlongDB.txt", true)))) {
-		    out.print("\n" + n.getName() + " | " + n.getAlt() + " | " + n.getLatitude() + " | " + n.getLongitude());
+		    out.print("\n" + n.getAlt() + " | " + n.getLatitude() + " | " + n.getLongitude());
 		}catch (IOException e) {
 		    
 		}

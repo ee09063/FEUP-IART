@@ -14,11 +14,9 @@ public class Angle {
 	}
 	
 	public void calculateAngles(Node anchor, ArrayList<Node> nodes){
-		//System.out.println("--- ANGLES ---");
 		for(Node n : nodes){
 			if(!n.getName().equals(anchor.getName())){
 				n.setA(this.angle(anchor,n));
-				//System.out.println(n.getName() + " " + n.getA());
 			}
 		}
 	}

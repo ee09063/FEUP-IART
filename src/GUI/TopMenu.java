@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import AStar.AStar;
+import Comparators.AngleComparator;
 import Graph.Graph;
 import Graph.Node;
-import Utilities.AngleComparator;
 import Utilities.Path;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -34,11 +35,15 @@ public class TopMenu {
 	static TextField hotel;
 	static TextField days;
 	static TextField timeLimit;
+	static ChoiceBox<String> travelMethod;
 	
 	final static FileChooser fileChooser = new FileChooser();
 	static String workDirectory = System.getProperty("user.dir");
 	
 	protected static Graph graph;
+	
+	public static ArrayList<Path> ptd = new ArrayList<Path>();
+	public static ArrayList<Path> ptd_alt = new ArrayList<Path>();
 	
 	HBox addHBox(Stage stage) {
 
@@ -74,9 +79,14 @@ public class TopMenu {
         
         timeLimit = new TextField();
         timeLimit.setPrefWidth(90);
-        timeLimit.setText("600");
+        timeLimit.setText("606");
         
-        Tbox.getChildren().addAll(daysLabel, days, hotelLabel, hotel, timeLabel, timeLimit);
+        
+        travelMethod = new ChoiceBox<String>();
+        travelMethod.getItems().addAll("On Foot (2 m/s)", "Bycicle (4.2 m/s)");
+        travelMethod.setValue("On Foot (2 m/s)");
+        
+        Tbox.getChildren().addAll(daysLabel, days, hotelLabel, hotel, timeLabel, timeLimit, travelMethod);
         
         Button runAStar = new Button("Run");
         runAStar.setPrefSize(100, 20);
@@ -114,10 +124,10 @@ public class TopMenu {
         
         Tourist.zoom.valueProperty().addListener(new ChangeListener<Object>(){
 			@Override
-			public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+			public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
 				if(graph != null){
-					graph.DISPLACE_X = Tourist.zoom.getValue();
-					graph.DISPLACE_Y = Tourist.zoom.getValue();
+					Graph.DISPLACE_X = Tourist.zoom.getValue();
+					Graph.DISPLACE_Y = Tourist.zoom.getValue();
 					graph.displaceNodes();
 					Drawing_Canvas.paint();
 				}
@@ -142,11 +152,11 @@ public class TopMenu {
 
                 RadioButton bt = (RadioButton)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
                 if(bt.equals(WH)){
-                	graph.WIDTH = Tourist.canvas.getWidth();
-                	graph.HEIGHT = Tourist.canvas.getHeight();
+                	Graph.WIDTH = Tourist.canvas.getWidth();
+                	Graph.HEIGHT = Tourist.canvas.getHeight();
                 } else if(bt.equals(WW)){
-                	graph.WIDTH = Tourist.canvas.getWidth();
-                	graph.HEIGHT = Tourist.canvas.getWidth();
+                	Graph.WIDTH = Tourist.canvas.getWidth();
+                	Graph.HEIGHT = Tourist.canvas.getWidth();
                 } 
                 graph.displaceNodes();
             	Drawing_Canvas.paint();
@@ -170,23 +180,29 @@ public class TopMenu {
 	
 	 static void runAStar(){
 	    	if(graph != null && !hotel.getText().equals("") && !timeLimit.getText().equals("") && !days.getText().equals("")){
-				//System.out.println("RUNNING");
 				int number_of_days = Integer.parseInt(days.getText());
 				
-				AStar pathFinder = new AStar(graph, graph.getNode(hotel.getText()), Integer.parseInt(timeLimit.getText()));
+				double step = 0;
+				
+				if(travelMethod.getValue().equals("On Foot (2 m/s)")){
+					step = 2.0;
+				} else if(travelMethod.getValue().equals("Bycicle (4.2 m/s)")){
+					step = 4.2;
+				}
+				
+				
+				AStar pathFinder = new AStar(graph, graph.getNode(hotel.getText()), Integer.parseInt(timeLimit.getText()), step);
 				AStar.clear();
-				Tourist.ptd.clear();
+				ptd.clear();
 				
 				for(int i = 0; i < number_of_days; i++){
-					//System.out.println("***** DAY " + (i+1) + " *****");
 					Path path = pathFinder.runAStar(graph.getNode(hotel.getText()));
 					if(path.getLength() > 2){
-						Tourist.ptd.add(path);
-						//System.out.println(path);
+						path.setTotalTime(step);
+						ptd.add(path);
 					}
-					//System.out.println("*************************");
 				}
-			} else System.err.println("CANNOT RUN");
+			} else PathOutput_FlowPane.paths.appendText("CANNOT RUN");
 	    }
 	
 	 public static void loadGraph(Stage stage){
@@ -196,12 +212,14 @@ public class TopMenu {
 		File inputFile = fileChooser.showOpenDialog(stage);
 	    if (inputFile != null) {
 	    	System.out.println("You tried to load file " + inputFile.getName());
+	    	reset();
 			try {
-				graph = new Graph(inputFile);
+				graph = new Graph(inputFile, Tourist.width, Tourist.height);
 				try {
 					graph.setDisplaceX(graph.getNodes().get(0).getLatLongX());
 					graph.setDisplaceY(graph.getNodes().get(0).getLatLongY());
 					graph.displaceNodes();
+				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -214,10 +232,16 @@ public class TopMenu {
 	}
 	    
 	 
+	private static void reset(){
+		ptd.clear();
+		ptd_alt.clear();
+		Drawing_Canvas.clearCanvas();
+	}
+	 
 	public static void adjustPaths(){
-		Tourist.ptd_alt.clear();
-		for(int i  = 0; i < Tourist.ptd.size(); i++){
-			adjustPath(Tourist.ptd.get(i));
+		ptd_alt.clear();
+		for(int i  = 0; i < ptd.size(); i++){
+			adjustPath(ptd.get(i));
 		}
 	}
 	
@@ -227,7 +251,7 @@ public class TopMenu {
 		Collections.sort(copy, new AngleComparator());
 		Node n = copy.remove(1);
 		copy.add(n);
-		Tourist.ptd_alt.add(new Path(copy));
+		ptd_alt.add(new Path(copy));
 	}
 	
 }

@@ -7,6 +7,8 @@ import Graph.Node;
 public class Path {
 	public ArrayList<Node> path = new ArrayList<Node>();
 	
+	public double totalTime;
+	
 	public Path(){
 		
 	}
@@ -56,21 +58,11 @@ public class Path {
 		return str;
 	}
 	
-	public Node closestNode(Node origin, ArrayList<Node> path){
-		//System.out.println(path);
-		Node closest = null;
-		float minDistance = Float.MAX_VALUE;
-		
-		for(int i = 0; i < path.size()-1; i++){
-			float dist = Distance.timeToTarget(origin, path.get(i));
-			if(dist < minDistance){
-				minDistance = dist;
-				closest = path.get(i);
-			}
-		}
-		if(closest == null){
-			return path.get(0);
-		}
-		return closest;
+	public void setTotalTime(double step){
+		Node last = getNode(path.size()-2);
+		Node hotel = getNode(0);
+		Distance dist = new Distance(step);
+		totalTime = last.getTotalTimeSpent() + dist.timeToTarget(last, hotel);
 	}
+	
 }

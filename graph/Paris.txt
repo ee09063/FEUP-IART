@@ -7,7 +7,10 @@ Bastille | Place de la Bastille | 10 | 5
 Manoir | Le Petit Manoir | 10 | 2
 Basillica | basilica paris france | 10 | 5
 Mars Fields | champ de mars paris france | 10 | 3
-Pere Lachaise Cemetery| Cimetiere du Pere Lachaise | 10 | 3
-Carnavalet Museum | Musée Carnavalet | 10 | 5
-Buttes-Chaumont Park | Parc des Buttes-Chaumont | 10 | 1
-Lutèce Arena | Arènes de Lutèce | 10 | 5
+Carnavalet Museum | Musee Carnavalet | 10 | 5
+Lutece Arena | Arenes de Lutece | 10 | 5
+Arc of Triumph | arc triomphe paris france | 10 | 4
+Voges Plaza | place des vosges paris franc | 10 | 2
+Paris Catacombs | catacombes paris france | 10 | 3
+Bourdelle | Musee Bourdelle | 10 | 2
+Jaquemart Museum | musee jacquemart andre | 10 | 2
